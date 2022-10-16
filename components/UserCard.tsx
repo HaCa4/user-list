@@ -1,8 +1,17 @@
 import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
-import { UserCardProps } from "../utilities/types";
 
-export default function UserCard({ user, selectUser }: UserCardProps) {
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+
+import { actionCreators } from "../utilities/store";
+import { UserCardProps } from "../utilities/types/types";
+
+export default function UserCard({ user }: UserCardProps) {
   let image = { uri: `${user?.image}` };
+
+  const dispatch = useDispatch();
+  const { selectUser } = bindActionCreators(actionCreators, dispatch);
+
   return (
     <Pressable
       onPress={() => {
@@ -11,11 +20,13 @@ export default function UserCard({ user, selectUser }: UserCardProps) {
       style={[styles.userCard, styles.elevation, styles.shadowProp]}
     >
       <ImageBackground source={image} style={styles.userImage} resizeMode="cover" />
+
       <View>
         <View style={styles.textWrapper}>
           <View style={styles.textView}>
             <Text style={styles.text}>{user?.firstName}</Text>
           </View>
+
           <View style={styles.textView}>
             <Text style={styles.text}>{user?.age}</Text>
           </View>

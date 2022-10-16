@@ -1,9 +1,17 @@
-import React from "react";
 import { View, Modal, Image, Text, StyleSheet, Pressable } from "react-native";
-import { UserDetailModalProps } from "../utilities/types";
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
 
-const UserDetailModal = ({ user, closeModal }: UserDetailModalProps) => {
-  let image = { uri: `${user?.image}` };
+import { actionCreators } from "../utilities/store";
+import { InitialState } from "../utilities/types/typesForRedux";
+
+const UserDetailModal = () => {
+  const dispatch = useDispatch();
+
+  const { selectedUser } = useSelector((state: InitialState) => state.reducer);
+  const { closeModals } = bindActionCreators(actionCreators, dispatch);
+  let image = { uri: `${selectedUser?.image}` };
+
   return (
     <Modal style={styles.modal}>
       <View style={styles.modalView}>
@@ -12,30 +20,30 @@ const UserDetailModal = ({ user, closeModal }: UserDetailModalProps) => {
           <View>
             <Text>
               First Name:
-              <Text style={styles.text}>{user?.firstName}</Text>
+              <Text style={styles.text}>{selectedUser?.firstName}</Text>
             </Text>
             <Text>
               Last Name:
-              <Text style={styles.text}>{user?.lastName}</Text>
+              <Text style={styles.text}>{selectedUser?.lastName}</Text>
             </Text>
             <Text>
               Age:
-              <Text style={styles.text}>{user?.age}</Text>
+              <Text style={styles.text}>{selectedUser?.age}</Text>
             </Text>
             <Text>
               Address:
-              <Text style={styles.text}>{user?.address?.address} </Text>
+              <Text style={styles.text}>{selectedUser?.address?.address} </Text>
             </Text>
             <Text>
               Postal Code:
-              <Text style={styles.text}>{user?.address?.postalCode}</Text>
+              <Text style={styles.text}>{selectedUser?.address?.postalCode}</Text>
             </Text>
             <Text>
               State:
-              <Text style={styles.text}>{user?.address?.state}</Text>
+              <Text style={styles.text}>{selectedUser?.address?.state}</Text>
             </Text>
           </View>
-          <Pressable onPress={closeModal} style={styles.close}>
+          <Pressable onPress={closeModals} style={styles.close}>
             <Text style={{ color: "white", fontWeight: "700" }}>Close</Text>
           </Pressable>
         </View>

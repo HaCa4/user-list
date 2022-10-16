@@ -62,9 +62,4 @@ export interface SingleUser {
 
 export interface UserCardProps {
   user: SingleUser;
-  selectUser: (user: SingleUser) => void;
-}
-export interface UserDetailModalProps {
-  user: SingleUser;
-  closeModal: () => void;
 }

@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Modal, Text, StyleSheet, Pressable, TextInput } from "react-native";
-import { SingleUser } from "../utilities/types";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
 
-interface NewUserModalProps {
-  closeModal: () => void;
-  setUserList: React.Dispatch<React.SetStateAction<SingleUser[]>>;
-  userList: SingleUser[];
-}
+import { actionCreators } from "../utilities/store";
 
-const NewUserModal = ({ closeModal, setUserList, userList }: NewUserModalProps) => {
+const NewUserModal = () => {
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<number | string>(0);
   const [url, setUrl] = useState<string>("");
 
+  const dispatch = useDispatch();
+  const { addNewUser, closeModals } = bindActionCreators(actionCreators, dispatch);
+
   const handleAddUser = async () => {
-    await setUserList([
-      ...userList,
-      {
-        firstName: name,
-        age: age,
-        image: url,
-      },
-    ]);
-    closeModal();
+    addNewUser({
+      firstName: name,
+      age: age,
+      image: url,
+    });
+    closeModals();
   };
+
   return (
     <Modal style={styles.modal}>
       <View style={styles.modalView}>
@@ -31,6 +29,7 @@ const NewUserModal = ({ closeModal, setUserList, userList }: NewUserModalProps) 
           <Text style={{ color: "black", fontWeight: "700", fontSize: 20, marginBottom: 8 }}>
             Add New User
           </Text>
+
           <View style={styles.inputContainer}>
             <TextInput
               value={name}
@@ -54,11 +53,13 @@ const NewUserModal = ({ closeModal, setUserList, userList }: NewUserModalProps) 
               placeholder="Photo URL"
             />
           </View>
+
           <View style={styles.buttonContainer}>
             <Pressable onPress={handleAddUser} style={styles.add}>
               <Text style={{ color: "white", fontWeight: "700" }}>Add</Text>
             </Pressable>
-            <Pressable onPress={closeModal} style={styles.close}>
+
+            <Pressable onPress={closeModals} style={styles.close}>
               <Text style={{ color: "white", fontWeight: "700" }}>Close</Text>
             </Pressable>
           </View>
